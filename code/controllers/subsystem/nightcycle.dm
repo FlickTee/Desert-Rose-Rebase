@@ -17,7 +17,7 @@ GLOBAL_LIST_INIT(nightcycle_turfs, typecacheof(list(
 
 SUBSYSTEM_DEF(nightcycle)
 	name = "Day/Night Cycle"
-	wait = 20 //20 ticks in between checks, this thing doesn't need to fire so fast, as it's tied to gameclock not its own ticker
+	wait = 5 //20 ticks in between checks, this thing doesn't need to fire so fast, as it's tied to gameclock not its own ticker
 	//This will also give the game time to light up the columns and not choke
 	//var/flags = 0			//see MC.dm in __DEFINES Most flags must be set on world start to take full effect. (You can also restart the mc to force them to process again
 	can_fire = TRUE
@@ -40,7 +40,7 @@ SUBSYSTEM_DEF(nightcycle)
 		currentColumn = 1
 
 /datum/controller/subsystem/nightcycle/proc/nextBracket()
-	var/Time = station_time()
+	var/Time = world.time //station_time()
 
 	switch (Time)
 		if (CYCLE_SUNRISE 	to CYCLE_MORNING - 1)

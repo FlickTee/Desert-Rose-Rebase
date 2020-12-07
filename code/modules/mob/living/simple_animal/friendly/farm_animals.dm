@@ -505,17 +505,18 @@
 
 /obj/item/udder
 	name = "udder"
+	var/milk_type = /datum/reagent/consumable/milk
 
 /obj/item/udder/Initialize(loc, milk_reagent)
-	if(!milk_reagent)
-		milk_reagent = /datum/reagent/consumable/milk
+	if(!milk_type && !milk_reagent)
+		milk_type = milk_reagent
 	create_reagents(50, NONE, NO_REAGENTS_VALUE)
-	reagents.add_reagent(milk_reagent, 20)
+	reagents.add_reagent(milk_type, 20)
 	. = ..()
 
-/obj/item/udder/proc/generateMilk(datum/reagent/milk_reagent)
-	if(prob(5))
-		reagents.add_reagent(milk_reagent, rand(5, 10))
+/obj/item/udder/proc/generateMilk()
+	if(prob(5) && milk_type)
+		reagents.add_reagent(milk_type, rand(5, 10))
 
 /obj/item/udder/proc/milkAnimal(obj/O, mob/user)
 	var/obj/item/reagent_containers/glass/G = O

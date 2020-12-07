@@ -1,3 +1,5 @@
+/*
+
 #define ALCOHOL_THRESHOLD_MODIFIER 0.05 //Greater numbers mean that less alcohol has greater intoxication potential
 #define ALCOHOL_RATE 0.005 //The rate at which alcohol affects you
 #define ALCOHOL_EXPONENT 1.6 //The exponent applied to boozepwr to make higher volume alcohol atleast a little bit damaging.
@@ -90,31 +92,6 @@ All effects don't start immediately, but rather get worse over time; the rate is
 	glass_desc = "A freezing pint of beer."
 	pH = 4
 
-	// Beer is a chemical composition of alcohol and various other things. It's a garbage nutrient but hey, it's still one. Also alcohol is bad, mmmkay?
-/datum/reagent/consumable/ethanol/beer/on_hydroponics_apply(obj/item/seeds/myseed, datum/reagents/chems, obj/machinery/hydroponics/mytray, mob/user)
-	. = ..()
-	if(chems.has_reagent(src, 1))
-		mytray.adjustHealth(-round(chems.get_reagent_amount(src.type) * 0.05))
-		mytray.adjustWater(round(chems.get_reagent_amount(src.type) * 0.7))
-
-/datum/reagent/consumable/ethanol/beer/light
-	name = "Light Beer"
-	description = "An alcoholic beverage brewed since ancient times on Old Earth. This variety has reduced calorie and alcohol content."
-	boozepwr = 5 //Space Europeans hate it
-	taste_description = "dish water"
-	glass_name = "glass of light beer"
-	glass_desc = "A freezing pint of watery light beer."
-	pH = 5
-
-/datum/reagent/consumable/ethanol/beer/green
-	name = "Green Beer"
-	description = "An alcoholic beverage brewed since ancient times on Old Earth. This variety is dyed a festive green."
-	color = "#A8E61D"
-	taste_description = "green piss water"
-	glass_icon_state = "greenbeerglass"
-	glass_name = "glass of green beer"
-	glass_desc = "A freezing pint of green beer. Festive."
-	pH = 6
 
 /datum/reagent/consumable/ethanol/beer/green/on_mob_life(mob/living/carbon/M)
 	if(M.color != color)
@@ -1925,36 +1902,7 @@ All effects don't start immediately, but rather get worse over time; the rate is
 		. = 1
 	return ..()
 
-/datum/reagent/consumable/ethanol/champagne //How the hell did we not have champagne already!?
-	name = "Champagne"
-	description = "A sparkling wine known for its ability to strike fast and hard."
-	color = "#ffffc1"
-	boozepwr = 40
-	taste_description = "auspicious occasions and bad decisions"
-	glass_icon_state = "champagne_glass"
-	glass_name = "Champagne"
-	glass_desc = "The flute clearly displays the slowly rising bubbles."
-	value = REAGENT_VALUE_COMMON
 
-/datum/reagent/consumable/ethanol/wizz_fizz
-	name = "Wizz Fizz"
-	description = "A magical potion, fizzy and wild! However the taste, you will find, is quite mild."
-	color = "#4235d0" //Just pretend that the triple-sec was blue curacao.
-	boozepwr = 50
-	quality = DRINK_GOOD
-	taste_description = "friendship! It is magic, after all"
-	glass_icon_state = "wizz_fizz"
-	glass_name = "Wizz Fizz"
-	glass_desc = "The glass bubbles and froths with an almost magical intensity."
-	value = REAGENT_VALUE_COMMON
-
-/datum/reagent/consumable/ethanol/wizz_fizz/on_mob_life(mob/living/carbon/M)
-	//A healing drink similar to Quadruple Sec, Ling Stings, and Screwdrivers for the Wizznerds; the check is consistent with the changeling sting
-	if(M?.mind?.has_antag_datum(/datum/antagonist/wizard))
-		M.heal_bodypart_damage(1,1,1)
-		M.adjustOxyLoss(-1,0)
-		M.adjustToxLoss(-1,0)
-	return ..()
 
 /datum/reagent/consumable/ethanol/bug_spray
 	name = "Bug Spray"
@@ -1978,15 +1926,7 @@ All effects don't start immediately, but rather get worse over time; the rate is
 		M.emote("scream")
 	return ..()
 
-/datum/reagent/consumable/ethanol/applejack
-	name = "Applejack"
-	description = "The perfect beverage for when you feel the need to horse around."
-	color = "#ff6633"
-	boozepwr = 20
-	taste_description = "an honest day's work at the orchard"
-	glass_icon_state = "applejack_glass"
-	glass_name = "Applejack"
-	glass_desc = "You feel like you could drink this all neight."
+
 
 /datum/reagent/consumable/ethanol/jack_rose
 	name = "Jack Rose"
@@ -2073,46 +2013,7 @@ All effects don't start immediately, but rather get worse over time; the rate is
 	glass_name = "Duplex"
 	glass_desc = "To imbibe one component separately from the other is consider a great faux pas."
 
-/datum/reagent/consumable/ethanol/trappist
-	name = "Trappist Beer"
-	description = "A strong dark ale brewed by space-monks."
-	color = "#390c00"
-	boozepwr = 40
-	quality = DRINK_VERYGOOD
-	taste_description = "dried plums and malt"
-	glass_icon_state = "trappistglass"
-	glass_name = "Trappist Beer"
-	glass_desc = "boozy Catholicism in a glass."
 
-/datum/reagent/consumable/ethanol/trappist/on_mob_life(mob/living/carbon/M)
-	if(M.mind.isholy)
-		M.adjustFireLoss(-2.5, 0)
-		M.jitteriness = max(0, M.jitteriness-1)
-		M.stuttering = max(0, M.stuttering-1)
-	return ..()
-
-/datum/reagent/consumable/ethanol/blazaam
-	name = "Blazaam"
-	description = "A strange drink that few people seem to remember existing. Doubles as a Berenstain remover."
-	boozepwr = 70
-	quality = DRINK_FANTASTIC
-	taste_description = "alternate realities"
-	glass_icon_state = "blazaamglass"
-	glass_name = "Blazaam"
-	glass_desc = "The glass seems to be sliding between realities. Doubles as a Berenstain remover."
-	value = REAGENT_VALUE_UNCOMMON
-	var/stored_teleports = 0
-
-/datum/reagent/consumable/ethanol/blazaam/on_mob_life(mob/living/carbon/M)
-	if(M.drunkenness > 40)
-		if(stored_teleports)
-			do_teleport(M, get_turf(M), rand(1,3), channel = TELEPORT_CHANNEL_WORMHOLE)
-			stored_teleports--
-		if(prob(10))
-			stored_teleports += rand(2,6)
-			if(prob(70))
-				M.vomit()
-	return ..()
 
 /datum/reagent/consumable/ethanol/planet_cracker
 	name = "Planet Cracker"
@@ -2527,3 +2428,4 @@ All effects don't start immediately, but rather get worse over time; the rate is
 	taste_description = flavor
 	if(holder.my_atom)
 		holder.my_atom.on_reagent_change()
+*/

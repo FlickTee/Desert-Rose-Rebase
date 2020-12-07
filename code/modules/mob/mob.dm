@@ -307,7 +307,7 @@ mob/visible_message(message, self_message, blind_message, vision_distance = DEFA
 		return
 
 	face_atom(A)
-	var/list/result
+	var/list/result = list()
 	if(client)
 		LAZYINITLIST(client.recent_examines)
 		if(isnull(client.recent_examines[A]) || client.recent_examines[A] < world.time)

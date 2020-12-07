@@ -384,10 +384,10 @@
     lootcount = 1
 
     loot = list(
-            /obj/effect/spawner/lootdrop/f13/armor/tier2 = 59,
+            /obj/effect/spawner/lootdrop/f13/armor/tier2 = 60,
             /obj/effect/spawner/lootdrop/f13/armor/tier3 = 30,
-            /obj/effect/spawner/lootdrop/f13/armor/tier4 = 10,
-            /obj/item/ring = 1 //one ring to rule them all
+            /obj/effect/spawner/lootdrop/f13/armor/tier4 = 10
+            //,/obj/item/ring = 1 //one ring to rule them all
             )
 
 /* ------------------------------------------------

@@ -72,14 +72,23 @@ All foods are distributed among various categories. Use common sense.
 	//Placeholder for effect that trigger on eating that aren't tied to reagents.
 
 /obj/item/reagent_containers/food/snacks/add_initial_reagents()
-	if(tastes && tastes.len)
-		if(list_reagents)
-			for(var/rid in list_reagents)
-				var/amount = list_reagents[rid]
-				if(rid == /datum/reagent/consumable/nutriment || rid == /datum/reagent/consumable/nutriment/vitamin)
-					reagents.add_reagent(rid, amount, tastes.Copy())
+	if(list_reagents)
+		var/path
+		for(var/rid in list_reagents)
+			if(istext(rid)) //Old style, much slower. please switch to types
+				path = get_chem_id(rid)
+			else if(ispath(rid))
+				path = rid
+			else //Someone typoed something. Whoops
+				path = /datum/reagent/consumable
+			var/amount = list_reagents[rid]
+			if(path == /datum/reagent/consumable/nutriment || path == /datum/reagent/consumable/nutriment/vitamin)
+				if(LAZYLEN(tastes))
+					reagents.add_reagent(path, amount, tastes.Copy())
 				else
-					reagents.add_reagent(rid, amount)
+					reagents.add_reagent(path, amount)
+			else
+				reagents.add_reagent(path, amount)
 	else
 		..()
 
@@ -230,14 +239,22 @@ All foods are distributed among various categories. Use common sense.
 						continue contents_loop
 				qdel(A)
 	SSblackbox.record_feedback("tally", "food_made", 1, type)
-
-	if(bonus_reagents && bonus_reagents.len)
-		for(var/r_id in bonus_reagents)
-			var/amount = bonus_reagents[r_id]
-			if(r_id == /datum/reagent/consumable/nutriment || r_id == /datum/reagent/consumable/nutriment/vitamin)
-				reagents.add_reagent(r_id, amount, tastes)
+	if(LAZYLEN(bonus_reagents))
+		var/path
+		for(var/thing in bonus_reagents)
+			if(istext(thing))
+				path = get_chem_id(thing)
 			else
-				reagents.add_reagent(r_id, amount)
+				path = thing
+
+			var/amount = bonus_reagents[thing]
+			if(path == /datum/reagent/consumable/nutriment || path == /datum/reagent/consumable/nutriment/vitamin)
+				if(LAZYLEN(tastes))
+					reagents.add_reagent(path, amount, tastes.Copy())
+				else
+					reagents.add_reagent(path, amount)
+			else
+				reagents.add_reagent(path, amount)
 
 /obj/item/reagent_containers/food/snacks/proc/slice(accuracy, obj/item/W, mob/user)
 	if((slices_num <= 0 || !slices_num) || !slice_path) //is the food sliceable?

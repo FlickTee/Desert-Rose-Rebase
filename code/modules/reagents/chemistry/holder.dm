@@ -851,7 +851,12 @@
 	if(amount < CHEMICAL_QUANTISATION_LEVEL)//To prevent small ammount problems.
 		return FALSE
 
-	var/datum/reagent/D = GLOB.chemical_reagents_list[reagent]
+	var/datum/reagent/D = null
+	if(ispath(reagent))
+		D = GLOB.chemical_reagents_list[reagent]
+	else if(istext(reagent)) //It was passed as a string old-style
+		D = GLOB.chemical_reagents_list[get_chem_id(reagent)]
+
 	if(!D)
 		WARNING("[my_atom] attempted to add a reagent called '[reagent]' which doesn't exist. ([usr])")
 		return FALSE
